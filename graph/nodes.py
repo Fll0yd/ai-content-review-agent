@@ -38,19 +38,19 @@ def extract_score(text: str, label: str) -> int:
     """
 
     patterns = [
-        rf"{label}\s*Score\s*:\s*(\d+)\s*/\s*10",
-        rf"{label}\s*Score\s*:\s*(\d+)\s*out\s*of\s*10",
-        rf"Score\s*:\s*(\d+)\s*/\s*10",
-        rf"Score\s*:\s*(\d+)\s*out\s*of\s*10",
+        rf"{label}\s*Score\s*:\s*(\d+(?:\.\d+)?)\s*/\s*10",
+        rf"{label}\s*Score\s*:\s*(\d+(?:\.\d+)?)\s*out\s*of\s*10",
+        rf"Score\s*:\s*(\d+(?:\.\d+)?)\s*/\s*10",
+        rf"Score\s*:\s*(\d+(?:\.\d+)?)\s*out\s*of\s*10",
     ]
 
     for pattern in patterns:
         match = re.search(pattern, text, re.IGNORECASE)
         if match:
-            score = int(match.group(1))
+            score = round(float(match.group(1)), 1)
             return max(0, min(score, 10))
 
-    return 0
+    return 0.0
 
 
 def grammar_review(state: ReviewState):
@@ -158,6 +158,7 @@ Article:
 
 def rewrite_article(state: ReviewState):
     article = state["article"]
+    style_guide = state.get("style_guide", "")
 
     prompt = f"""
 You are an expert content editor.
@@ -171,6 +172,9 @@ Goals:
 - Keep the original meaning
 - Make it suitable for publication
 
+Style Guide:
+{style_guide}
+
 Article:
 {article}
 """
@@ -179,4 +183,54 @@ Article:
 
     return {
         "improved_article": response.content,
+    }
+
+def meta_description_generator(state: ReviewState):
+    article = state["article"]
+
+    prompt = f"""
+You are an SEO copywriter.
+
+Generate one SEO-friendly meta description for the article below.
+
+Requirements:
+- 140 to 160 characters
+- Clear and specific
+- Written for search results
+- Include the main topic
+- Do not use quotation marks
+- Return only the meta description text
+
+Article:
+{article}
+"""
+
+    response = llm.invoke(prompt)
+
+    return {
+        "meta_description": response.content.strip(),
+    }
+
+def seo_title_generator(state: ReviewState):
+    article = state["article"]
+
+    prompt = f"""
+You are an SEO strategist.
+
+Generate 3 SEO-friendly article titles.
+
+Requirements:
+- Engaging
+- Keyword-focused
+- Under 70 characters
+- Number them 1 through 3
+
+Article:
+{article}
+"""
+
+    response = llm.invoke(prompt)
+
+    return {
+        "seo_titles": response.content.strip(),
     }

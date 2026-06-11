@@ -32,7 +32,11 @@ The goal was to create a practical AI system that provides real business value r
 
 ![Main UI](docs/screenshots/main-ui.png)
 
-### Review Results
+### Content Review Dashboard
+
+![Dashboard](docs/screenshots/review_results.png)
+
+### Detailed Analysis Results
 
 ![Results](docs/screenshots/results.png)
 
@@ -40,70 +44,18 @@ The goal was to create a practical AI system that provides real business value r
 
 ## Features
 
-### Grammar Review Agent
-
-Analyzes content for:
-
-- Grammar
-- Spelling
-- Punctuation
-- Sentence clarity
-
-Outputs:
-
-- Grammar score
-- Detailed feedback
-
----
-
-### SEO Review Agent
-
-Analyzes content for:
-
-- Search intent
-- Keyword targeting
-- Meta description opportunities
-- Internal linking opportunities
-- SEO effectiveness
-
-Outputs:
-
-- SEO score
-- Optimization recommendations
-
----
-
-### Readability Review Agent
-
-Analyzes content for:
-
-- Clarity
-- Sentence length
-- Paragraph structure
-- Reader friendliness
-- Actionability
-
-Outputs:
-
-- Readability score
-- Improvement suggestions
-
----
-
-### Rewrite Agent
-
-Generates an improved version of the content by:
-
-- Correcting grammar issues
-- Improving readability
-- Enhancing SEO structure
-- Preserving original intent
-
-Outputs:
-
-- Publication-ready rewritten content
-
----
+- Grammar Review Agent
+- SEO Review Agent
+- Readability Review Agent
+- AI Rewrite Agent
+- Executive Content Score Dashboard
+- SEO Title Generation
+- Meta Description Generation
+- Style Guide Guided Rewriting
+- Downloadable Review Reports
+- Local LLM Support via Ollama
+- Cloud LLM Support via Anthropic
+- LangGraph Workflow Orchestration
 
 ## Architecture
 
@@ -120,10 +72,19 @@ SEO Review
 Readability Review
       │
       ▼
+SEO Title Generator
+      │
+      ▼
+Meta Description Generator
+      │
+      ▼
 Rewrite Agent
       │
       ▼
-Improved Article
+Content Dashboard
+      │
+      ▼
+Final Report
 ```
 
 Built using LangGraph to model a multi-step AI workflow where each node performs a specific content analysis task.
@@ -167,7 +128,7 @@ Built using LangGraph to model a multi-step AI workflow where each node performs
 ## Project Structure
 
 ```text
-blacksmith-content-review-agent/
+ai-content-review-agent/
 
 ├── graph/
 │   ├── nodes.py
@@ -212,7 +173,7 @@ https://ollama.com
 Pull a model:
 
 ```bash
-ollama pull llama3.1:8b
+ollama pull llama3.2:3b
 ```
 
 ### 4. Configure Environment
@@ -221,7 +182,7 @@ Create a `.env` file:
 
 ```env
 LOCAL_MODE=true
-OLLAMA_MODEL=llama3.1:8b
+OLLAMA_MODEL=llama3.2:3b
 
 # Optional Anthropic Support
 ANTHROPIC_API_KEY=
@@ -266,13 +227,30 @@ Potential future improvements include:
 
 - Structured JSON outputs
 - Automatic score extraction using Pydantic models
-- RAG-powered style guide enforcement
-- WordPress integration
-- Meta description generation
-- Blog title generation
-- Export to PDF/Markdown
+- PDF report export
+- WordPress publishing integration
+- RAG-powered company style guides
+- Team collaboration features
+- Historical content scoring
+- Multi-model comparison
+- Content approval workflows
+- Batch article processing
 - MCP integration
-- Multi-model evaluation
+
+---
+
+## Results
+
+This project successfully demonstrates:
+
+- LangGraph workflow orchestration
+- Multi-agent AI architectures
+- Local LLM deployment with Ollama
+- Prompt-driven content evaluation
+- Automated content improvement workflows
+- Production-style Streamlit interfaces
+
+The application can review content, score quality, generate SEO assets, and produce rewritten publication-ready articles using entirely local AI models.
 
 ---
 
